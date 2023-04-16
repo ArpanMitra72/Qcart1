@@ -35,7 +35,7 @@ router.post("/register", (req, res) => {
     // }
     users.insert({
       username: req.body.username,
-      password: sha256(req.body.password),
+      password: req.body.password,
       balance: 5000,
       cart: [],
       addresses: [],
@@ -62,7 +62,7 @@ router.post("/login", (req, res) => {
         message: "Username does not exist",
       });
     }
-    if (user.password !== sha256(req.body.password)) {
+    if (user.password !== req.body.password) {
       return res.status(400).json({
         success: false,
         message: "Password is incorrect",
