@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import axios from "axios";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
+import { useHistory, Link } from "react-router-dom";
 import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -22,6 +23,7 @@ const Register = (props) => {
   const [password,setPassword] = useState("");
   const [confirmPassword,setConfirmPassword] = useState("");
   const [success,setSuccess] = useState(false);
+  const history = useHistory();
   const buttonHandle = (e) =>{
     const formData = {
       UserName: username,
@@ -31,7 +33,7 @@ const Register = (props) => {
     console.log(formData);
     if(validateInput(formData)===true){
       setSuccess(true);
-      register(formData);
+      register(formData);   
     }
   }
 
@@ -86,6 +88,7 @@ const Register = (props) => {
       setConfirmPassword("");
       console.log(response);
       enqueueSnackbar("Registered successfully",{variant:"success"});
+      history.push("/login");
     } catch(error){
       if(error.response.status===400){
        enqueueSnackbar(error.response.data.message,{variant:"error"});
@@ -204,7 +207,7 @@ const Register = (props) => {
           )} 
           <p className="secondary-action">
             Already have an account?{" "}
-             <a className="link" href="#">
+             <a className="link" href="/login">
               Login here
              </a>
           </p>
