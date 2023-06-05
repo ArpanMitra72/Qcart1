@@ -212,21 +212,21 @@ const Products = (props) => {
           </Box>
          ):(
           <div className="product-container">
-          <Grid container marginY="1rem" paddingX="1rem" spacing={2} >
              {products.length?(
-                products.map((product) => (
+              <Grid container marginY="1rem" paddingX="1rem" spacing={2} >
+                {products.map((product) => (
                   // console.log(product);
                   <Grid item key={product._id} xs={6} md={3}>
                     <ProductCard product={product} />
                   </Grid>
-                ))
+                ))}
+              </Grid>
               ):(
                 <Box className="loading"> 
                     <SentimentDissatisfied/>
                     <p>No products found</p>  
                 </Box>
               )}
-          </Grid> 
           </div>              
          )}
        </Grid>
