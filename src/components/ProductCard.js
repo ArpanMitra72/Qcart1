@@ -22,6 +22,9 @@ import "./ProductCard.css";
 //   }
 const ProductCard = ({ product, handleAddToCart }) => {
   // console.log(product);
+  // const addToCartItems = (productId,qty)=>{
+  //   handleAddToCart(product,productId,qty);
+  // };
   return (
     <>
       <Card className = "card">
@@ -40,7 +43,8 @@ const ProductCard = ({ product, handleAddToCart }) => {
           <Rating name="read-only" defaultValue={product.rating} precision={0.5} readOnly/>
         </CardContent>
         <CardActions>
-          <Button fullWidth variant="contained" className="card-button" id={product._id}>
+          <Button fullWidth variant="contained" className="card-button" id={product._id}
+          onClick={handleAddToCart}>
             <AddShoppingCartOutlined />
             ADD TO CART
           </Button>
