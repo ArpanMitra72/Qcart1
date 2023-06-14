@@ -4,7 +4,7 @@ import {
   ShoppingCart,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import { Button, IconButton, Stack } from "@mui/material";
+import { Button, IconButton, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useHistory } from "react-router-dom";
@@ -38,7 +38,7 @@ import "./Cart.css";
  *
  * @param { Array.<{ productId: String, qty: Number }> } cartData
  *    Array of objects with productId and quantity of products in cart
- *
+ * 
  * @param { Array.<Product> } productsData
  *    Array of objects with complete data on all available products
  *
@@ -96,7 +96,10 @@ export const getTotalCartValue = (items = []) => {
  *
  *
  */
-const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
+const ItemQuantity = ({ value, handleAdd, handleDelete , isCheckout=false}) => {
+    if(isCheckout){
+      return <Box>Qty: {value}</Box>
+    }
   return (
     <Stack direction="row" alignItems="center">
       <IconButton size="small" color="primary" onClick={handleDelete}>
@@ -127,7 +130,7 @@ const ItemQuantity = ({ value, handleAdd, handleDelete }) => {
  *
  */
  
-const Cart = ({products, items = [], handleQuantity }) => {
+const Cart = ({products, items = [], handleQuantity, isCheckout }) => {
   const token = localStorage.getItem("token");
   const history = useHistory();
   const handleCheckout = () => {
@@ -175,30 +178,34 @@ const Cart = ({products, items = [], handleQuantity }) => {
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <ItemQuantity
-                  // Add required props by checking implementation
-                    value={item.qty}
-                    // handleAdd={() => handleQuantity(item.productId,1)}
-                    // handleDelete={() => handleQuantity(item.productId, -1)}
-                    handleAdd={() => {
-                      handleQuantity(
-                        token,
-                        items,
-                        products,
-                        item.productId,
-                        item.qty + 1
-                      );
-                    }}
-                    handleDelete={() => {
-                       handleQuantity(
-                        token,
-                        items,
-                        products,
-                        item.productId,                        
-                        item.qty - 1
-                      );
-                    }}
-                  />
+                  {(
+                    <ItemQuantity
+                    // Add required props by checking implementation
+                      isCheckout = {isCheckout}
+                      value={item.qty}
+                      // handleAdd={() => handleQuantity(item.productId,1)}
+                      // handleDelete={() => handleQuantity(item.productId, -1)}
+                      handleAdd={() => {
+                        handleQuantity(
+                          token,
+                          items,
+                          products,
+                          item.productId,
+                          item.qty + 1
+                        );
+                      }}
+                      handleDelete={() => {
+                         handleQuantity(
+                          token,
+                          items,
+                          products,
+                          item.productId,                        
+                          item.qty - 1
+                        );
+                      }}
+                      // isReadOnly={isReadOnly}
+                    />
+                  )}
                   <Box padding="0.5rem" fontWeight="700">
                     ${item.cost}
                   </Box>
@@ -226,8 +233,8 @@ const Cart = ({products, items = [], handleQuantity }) => {
             ${getTotalCartValue(items)}
           </Box>
         </Box>
-
-        <Box display="flex" justifyContent="flex-end" className="cart-footer">
+        {!isCheckout && (
+          <Box display="flex" justifyContent="flex-end" className="cart-footer">
           <Button
             color="primary"
             variant="contained"
@@ -238,6 +245,31 @@ const Cart = ({products, items = [], handleQuantity }) => {
             Checkout
           </Button>
         </Box>
+        )} 
+      </Box>
+      <Box>
+        {isCheckout && (
+          <Box className="cart" display="flex" flexDirection="column" alignItems="flex-start" padding="1rem" bgcolor="white">
+            <h2>Order Details </h2>
+            <Box display="flex" justifyContent="space-between" width="100%">
+              <Typography>Value</Typography>
+              <Typography>{items.length}</Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between" width="100%">
+              <Typography>Subtotal</Typography>
+              <Typography>${getTotalCartValue(items)}</Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between" width="100%">
+              <Typography>Shipping Charges</Typography>
+              <Typography>{0}</Typography> 
+            </Box>
+            {/* <h3>Total ${getTotalCartValue(items)}</h3> */}
+            <Box display="flex" justifyContent="space-between" width="100%">
+            <h3>Total</h3>
+            <h3>${getTotalCartValue(items)}</h3>
+            </Box>
+          </Box>
+        )}
       </Box>
     </>
   );

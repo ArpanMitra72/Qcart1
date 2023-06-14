@@ -408,7 +408,7 @@ const Products = (props) => {
                 ) : (
                   <Box className="loading">
                     <SentimentDissatisfied />
-                    <p>No products found</p>
+                    <div>No products found</div>
                   </Box>
                 )}
               </div>
